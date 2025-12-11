@@ -1,0 +1,18 @@
+{
+	"ulid": "01KC74DA67TKP8N38E5882TPWM",
+	"minTime": 1765425601314,
+	"maxTime": 1765432800000,
+	"stats": {
+		"numSamples": 348401,
+		"numFloatSamples": 348401,
+		"numSeries": 1013,
+		"numChunks": 2983
+	},
+	"compaction": {
+		"level": 1,
+		"sources": [
+			"01KC74DA67TKP8N38E5882TPWM"
+		]
+	},
+	"version": 1
+}

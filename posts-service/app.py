@@ -4,7 +4,7 @@ import consul
 import json
 from typing import Dict, List
 import logging
-from prometheus_client import Counter, Histogram, generate_latest
+from prometheus_client import Counter, Histogram, generate_latest, CONTENT_TYPE_LATEST
 from fastapi.responses import Response
 from confluent_kafka import Consumer, Producer
 import threading

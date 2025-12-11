@@ -33,15 +33,71 @@ echo     "version": 1,
 echo     "refresh": "10s",
 echo     "panels": [
 echo       {
+echo         "id": 1,
+echo         "title": "HTTP Requests Total",
+echo         "type": "stat",
+echo         "targets": [
+echo           { "expr": "sum(requests_total)", "legendFormat": "Total Requests", "refId": "A" }
+echo         ],
+echo         "gridPos": { "h": 8, "w": 6, "x": 0, "y": 0 },
+echo         "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" }, "unit": "short" } }
+echo       },
+echo       {
+echo         "id": 2,
+echo         "title": "Request Latency",
+echo         "type": "timeseries",
+echo         "targets": [
+echo           { "expr": "rate(request_latency_seconds_sum[5m]) / rate(request_latency_seconds_count[5m])", "legendFormat": "Avg Latency", "refId": "A" }
+echo         ],
+echo         "gridPos": { "h": 8, "w": 18, "x": 6, "y": 0 },
+echo         "fieldConfig": { "defaults": { "unit": "s", "color": { "mode": "palette-classic" } } }
+echo       },
+echo       {
+echo         "id": 3,
+echo         "title": "User Registrations",
+echo         "type": "stat",
+echo         "targets": [
+echo           { "expr": "user_registrations_total", "legendFormat": "Registrations", "refId": "A" }
+echo         ],
+echo         "gridPos": { "h": 8, "w": 6, "x": 0, "y": 8 },
+echo         "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" } } }
+echo       },
+echo       {
+echo         "id": 4,
+echo         "title": "Post Creations",
+echo         "type": "stat",
+echo         "targets": [
+echo           { "expr": "post_creations_total", "legendFormat": "Posts Created", "refId": "A" }
+echo         ],
+echo         "gridPos": { "h": 8, "w": 6, "x": 6, "y": 8 },
+echo         "fieldConfig": { "defaults": { "color": { "mode": "palette-classic" } } }
+echo       },
+echo       {
 echo         "id": 5,
 echo         "title": "Service Health",
 echo         "type": "stat",
 echo         "targets": [
 echo           { "expr": "up{job=~\"api-gateway^|usuarios-service^|posts-service\"}", "legendFormat": "{{job}}", "refId": "A" }
 echo         ],
-echo         "gridPos": { "h": 8, "w": 8, "x": 16, "y": 8 }
+echo         "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+echo         "fieldConfig": {
+echo           "defaults": {
+echo             "color": { "mode": "thresholds" },
+echo             "thresholds": {
+echo               "steps": [
+echo                 { "color": "red", "value": null },
+echo                 { "color": "green", "value": 1 }
+echo               ]
+echo             },
+echo             "unit": "short"
+echo           }
+echo         }
 echo       }
-echo     ]
+echo     ],
+echo     "time": { "from": "now-1h", "to": "now" },
+echo     "timepicker": {},
+echo     "templating": { "list": [] },
+echo     "tags": ["soa", "monitoring"]
 echo   },
 echo   "folderId": 0,
 echo   "overwrite": true
