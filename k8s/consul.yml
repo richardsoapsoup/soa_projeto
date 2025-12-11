@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: consul
+  namespace: soa-architecture
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: consul
+  template:
+    metadata:
+      labels:
+        app: consul
+    spec:
+      containers:
+      - name: consul
+        image: consul:1.15
+        ports:
+        - containerPort: 8500
+        - containerPort: 8600
+        command: ["consul", "agent", "-server", "-bootstrap", "-ui", "-client=0.0.0.0"]
+        env:
+        - name: CONSUL_BIND_INTERFACE
+          value: "eth0"
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul
+  namespace: soa-architecture
+spec:
+  selector:
+    app: consul
+  ports:
+  - name: http
+    port: 8500
+    targetPort: 8500
+  - name: dns
+    port: 8600
+    targetPort: 8600
+  type: LoadBalancer

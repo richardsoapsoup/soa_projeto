@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  api-gateway:
+    volumes:
+      - ./logs/api-gateway:/app/logs
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  usuarios-service:
+    volumes:
+      - ./logs/usuarios-service:/app/logs
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  posts-service:
+    volumes:
+      - ./logs/posts-service:/app/logs
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  prometheus:
+    volumes:
+      - ./data/prometheus:/prometheus
+
+  grafana:
+    volumes:
+      - ./data/grafana:/var/lib/grafana

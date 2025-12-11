@@ -1,0 +1,152 @@
+{
+  "dashboard": {
+    "id": null,
+    "uid": "soa-monitoring",
+    "title": "SOA Architecture Monitoring",
+    "tags": ["soa", "monitoring"],
+    "timezone": "browser",
+    "schemaVersion": 35,
+    "version": 1,
+    "refresh": "10s",
+    "panels": [
+      {
+        "id": 1,
+        "title": "HTTP Requests - Total",
+        "type": "stat",
+        "description": "Total de requisições HTTP por serviço",
+        "targets": [
+          {
+            "expr": "sum by (job) (requests_total)",
+            "legendFormat": "{{job}}",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "palette-classic"},
+            "unit": "short",
+            "thresholds": {
+              "steps": [
+                {"color": "green", "value": null}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 2,
+        "title": "Request Latency - 5m Avg",
+        "type": "timeseries",
+        "description": "Latência média das requisições",
+        "targets": [
+          {
+            "expr": "rate(request_latency_seconds_sum[5m]) / rate(request_latency_seconds_count[5m])",
+            "legendFormat": "{{job}} - {{method}}",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0},
+        "fieldConfig": {
+          "defaults": {
+            "unit": "s",
+            "color": {"mode": "palette-classic"},
+            "min": 0
+          }
+        }
+      },
+      {
+        "id": 3,
+        "title": "User Metrics",
+        "type": "stat",
+        "description": "Métricas de usuários",
+        "targets": [
+          {
+            "expr": "user_registrations_total",
+            "legendFormat": "Registrations",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {"h": 6, "w": 8, "x": 0, "y": 8},
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "palette-classic"}
+          }
+        }
+      },
+      {
+        "id": 4,
+        "title": "Post Metrics",
+        "type": "stat",
+        "description": "Métricas de posts",
+        "targets": [
+          {
+            "expr": "post_creations_total",
+            "legendFormat": "Posts Created",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {"h": 6, "w": 8, "x": 8, "y": 8},
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "palette-classic"}
+          }
+        }
+      },
+      {
+        "id": 5,
+        "title": "Service Health",
+        "type": "stat",
+        "description": "Status de saúde dos serviços",
+        "targets": [
+          {
+            "expr": "up{job=~\"api-gateway|usuarios-service|posts-service\"}",
+            "legendFormat": "{{job}}",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {"h": 6, "w": 8, "x": 16, "y": 8},
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "thresholds"},
+            "thresholds": {
+              "steps": [
+                {"color": "red", "value": null},
+                {"color": "green", "value": 1}
+              ]
+            },
+            "unit": "short",
+            "min": 0,
+            "max": 1
+          }
+        }
+      },
+      {
+        "id": 6,
+        "title": "HTTP Status Codes",
+        "type": "bargauge",
+        "description": "Distribuição de códigos de status HTTP",
+        "targets": [
+          {
+            "expr": "sum by (status_code) (requests_total)",
+            "legendFormat": "Status {{status_code}}",
+            "refId": "A"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 14},
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "palette-classic"},
+            "unit": "short"
+          }
+        }
+      }
+    ],
+    "time": {"from": "now-1h", "to": "now"},
+    "timepicker": {
+      "refresh_intervals": ["5s", "10s", "30s", "1m", "5m", "15m", "30m", "1h", "2h", "1d"]
+    }
+  },
+  "folderId": 0,
+  "overwrite": true
+}

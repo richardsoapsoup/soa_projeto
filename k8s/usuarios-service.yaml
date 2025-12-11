@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: usuarios-service
+  namespace: soa-architecture
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: usuarios-service
+  template:
+    metadata:
+      labels:
+        app: usuarios-service
+    spec:
+      containers:
+      - name: usuarios-service
+        image: soa-usuarios-service:latest
+        ports:
+        - containerPort: 8001
+        env:
+        - name: CONSUL_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: CONSUL_HOST
+        - name: CONSUL_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: CONSUL_PORT
+        - name: KAFKA_BOOTSTRAP_SERVERS
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: KAFKA_BOOTSTRAP_SERVERS
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8001
+          initialDelaySeconds: 30
+          periodSeconds: 10
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: usuarios-service
+  namespace: soa-architecture
+spec:
+  selector:
+    app: usuarios-service
+  ports:
+  - port: 8001
+    targetPort: 8001
